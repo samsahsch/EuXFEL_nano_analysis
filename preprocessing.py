@@ -128,6 +128,8 @@ else:
 
 ### Dataframe per event
 
+
+
 print('Loading per event data...')
 
 
@@ -290,3 +292,100 @@ dataevent['tot'] = finaltot.astype('int16')
 
 dfevent = pd.DataFrame(data=dataevent)
 dfevent.to_hdf(filename, key='dfevent', mode='w') 
+
+
+
+
+### Dataframe per pulse
+
+
+
+print('Loading per pulse data...')
+
+
+# Retrieve data
+
+gasattenuator_pressure = run['SA3_XTD10_VAC/MDL/GATT_P_CELL', 'value.value'].xarray()
+
+pulseenergy_sase3 = run['SA3_XTD10_XGM/XGM/DOOCS:output', 'data.intensitySa3TD'].xarray()
+pulseenergy_sqs = run['SQS_DIAG1_XGMD/XGM/DOOCS:output', 'data.intensitySa3TD'].xarray()
+
+pnccd_gain = run['SQS_NQS_PNCCD1MP/MDL/DAQ_GAIN', 'pNCCDGain.value'].xarray()
+pnccd_voltage = run['SQS_NQS_PNCCD1MP/MDL/DAQ_MPOD', 'u0voltage.value'].xarray()
+
+#voltage_channel = run['SQS_RACK_MPOD-1/MDL/MPOD_MAPPER', ''].xarray() IS INCLUDED IN RUN LOG
+
+# Remove unnecessary data
+
+pulseenergy_sase3 = pulseenergy_sase3[:,:PULSES_PER_TRAIN]
+pulseenergy_sqs = pulseenergy_sqs[:,:PULSES_PER_TRAIN]
+
+
+print('Producing dataframe per pulse...')
+
+
+
+# Insert zeros when missing a train
+
+zero_array = np.zeros(92)
+
+shift_pulseenergy_sase3 = 0
+shift_pulseenergy_sqs = 0
+
+for trainid in range(trains):
+        
+    if trainid - shift_pulseenergy_sase3 > pulseenergy_sase3.shape[0] or trainid != int(pulseenergy_sase3.trainId[trainid - shift_pulseenergy_sase3]) - first_trainid:
+        
+        pulseenergy_sase3 = np.insert(pulseenergy_sase3, trainid, zero_array, axis=0)
+        shift_pulseenergy_sase3 += 1
+        
+    if trainid - shift_pulseenergy_sqs > pulseenergy_sqs.shape[0] or trainid != int(pulseenergy_sqs.trainId[trainid - shift_pulseenergy_sqs]) - first_trainid:
+        
+        pulseenergy_sqs = np.insert(pulseenergy_sqs, trainid, zero_array, axis=0)
+        shift_pulseenergy_sqs += 1
+
+
+
+# Compute train ID & pulse ID, convert into per pulse data
+
+trainid_part = np.char.zfill(np.repeat(np.arange(1,trains+1),PULSES_PER_TRAIN).astype(str),5)
+trainid = np.char.add(str(RUNID), trainid_part).astype(int)
+
+pulseid_part = np.char.zfill(np.tile(np.arange(1,PULSES_PER_TRAIN+1),trains).astype(str),3)
+pulseid = np.char.add(trainid.astype(str), pulseid_part).astype(int)
+
+gasattenuator_transmission = np.repeat(gasattenuator_transmission,PULSES_PER_TRAIN)
+gasattenuator_pressure = np.repeat(gasattenuator_pressure,PULSES_PER_TRAIN)
+
+pulseenergy_sase3 = np.array([pulseenergy_sase3]).reshape(-1)
+pulseenergy_sqs = np.array([pulseenergy_sqs]).reshape(-1)
+
+pnccd_gain = np.repeat(pnccd_gain,PULSES_PER_TRAIN)
+pnccd_voltage = np.repeat(pnccd_voltage,PULSES_PER_TRAIN)
+
+
+
+print('Saving dataframe per pulse...')
+
+
+
+# Build dictionary for pulse split data
+
+datapulse = dict()
+datapulse['trainId'] = trainid.astype('int32')
+datapulse['pulseId'] = pulseid
+datapulse['gasattenuator_transmission'] = gasattenuator_transmission.astype('float32')
+datapulse['gasattenuator_pressure'] = gasattenuator_pressure.astype('float32')
+datapulse['pulseenergy_sase3'] = pulseenergy_sase3.astype('float32')
+datapulse['pulseenergy_sqs'] = pulseenergy_sqs.astype('float32')
+datapulse['pnccd_gain'] = pnccd_gain.astype('float16')
+datapulse['pnccd_voltage'] = pnccd_voltage.astype('float32')
+datapulse['nevents_pulse'] = nevents_pulse
+datapulse['nevents_train'] = nevents_train_repeated
+
+
+
+# Create save and read dataframe per pulse
+
+dfpulse = pd.DataFrame(data=datapulse)
+dfpulse.to_hdf(filename, key='dfpulse', mode='a')  
