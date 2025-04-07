@@ -395,3 +395,48 @@ dfpulse.to_hdf(filename, key='dfpulse', mode='a')
 
 
 
+
+### Etof
+
+
+
+print('Loading etof data...')
+
+
+digitizer = run['SQS_DIGITIZER_UTC1/ADC/1:network', 'digitizers.channel_1_A.raw.samples'].ndarray()
+digitizer_trainid = run['SQS_DIGITIZER_UTC1/ADC/1:network', 'digitizers.trainId'].ndarray()
+
+
+print('Producing etof xarray...')
+
+
+def removePeriodicNoiseRunData(traces, n, dead_time ):
+    clean_trace = traces.astype(dtype=np.float64)
+    for i in range(n):
+        clean_trace[:, i::n] -= clean_trace[:,dead_time:][:,i::n].mean()
+    return clean_trace
+
+def slicePeriodicRunData(signal,offset,periodicity,N):
+    return signal[:,offset:offset+N*periodicity].reshape([signal.shape[0]*N,periodicity])
+
+
+# Clean and slice digitizer data
+
+# clean each train one by one
+clean_digitizer = removePeriodicNoiseRunData(digitizer, DIGITIZER_NOISE_PERIODICITY, DIGITIZER_END)
+
+# slice clean digitizer data into trains and pulses 
+sliced_etof_data = slicePeriodicRunData(clean_digitizer, DIGITIZER_OFFSET, N_CHANNELS_PULSE, PULSES_PER_TRAIN)
+
+
+digitizer_pulseid_part = np.char.zfill(np.tile(np.arange(1,PULSES_PER_TRAIN+1),digitizer_trainid.shape[0]).astype(str),3)
+digitizer_trainid = np.repeat( np.char.add(str(RUNID), np.chararray.zfill((digitizer_trainid-first_trainid+1).astype(str),5)).astype(int), PULSES_PER_TRAIN)
+digitizer_pulseid = np.char.add(digitizer_trainid.astype(str), digitizer_pulseid_part).astype(int)
+
+
+etof = xr.DataArray(sliced_etof_data)
+etof = etof.assign_coords(dim_0=digitizer_pulseid).rename({'dim_0':'pulseId','dim_1':'data'})
+
+
+print('Saving etof xarray...')
+
