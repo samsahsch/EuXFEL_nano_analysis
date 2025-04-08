@@ -440,3 +440,35 @@ etof = etof.assign_coords(dim_0=digitizer_pulseid).rename({'dim_0':'pulseId','di
 
 print('Saving etof xarray...')
 
+
+
+
+
+### PNCCD
+
+
+
+print('Loading pnccd data...')
+
+# Import pnccd raw images
+pnccd_raw = run['SQS_NQS_PNCCD1MP/CAL/PNCCD_FMT-0:output', 'data.image'].xarray()
+
+
+
+print('Producing pnccd xarray...')
+
+# Rescaling train IDs so they fit the chosen identifiers
+pnccd_corrected_ids = pnccd_raw.assign_coords(trainId=np.char.add(str(RUNID), np.chararray.zfill((pnccd_raw.trainId-first_trainid+1).astype(str),5)).astype(int))
+
+# Rename array to a format that works with hdf5
+pnccd = pnccd_corrected_ids.rename('pnccd')
+
+
+
+print('Saving pnccd xarray...')
+
+pnccd.to_netcdf(filename, mode='a', group='pnccd', engine='h5netcdf')
+
+
+
+
