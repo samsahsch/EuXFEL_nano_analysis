@@ -472,3 +472,34 @@ pnccd.to_netcdf(filename, mode='a', group='pnccd', engine='h5netcdf')
 
 
 
+
+### Reset
+
+
+
+end_time = time.time()
+print(f"Preprocessing took {end_time - start_time:.2f} seconds")
+
+
+%reset -f
+
+
+import pandas as pd
+import xarray as xr
+
+def read(runid):
+    'Read the preprocessed data of run with ID runid saved in the h5 file with a corresponding name'
+    'Outputs dataframes per event, per pulse, and xarrays etof, pnccd in that order'
+    
+    filename = 'datarun' + str(RUNID) + '.h5'
+    
+    dfevent = pd.read_hdf(filename, 'dfevent')
+    dfpulse = pd.read_hdf(filename, 'dfpulse')
+    
+    etof = xr.open_dataarray(filename, group="etof")
+    pnccd = xr.open_dataarray(filename, group="pnccd")
+    
+    return dfevent, dfpulse, etof, pnccd
+
+
+print('')
