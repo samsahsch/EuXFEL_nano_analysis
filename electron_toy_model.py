@@ -31,7 +31,6 @@ def simulate_electron_dynamics():
         n_electrons = max(n_electrons, 50)  # Ensure minimum number of electrons
         
         # Initial energy proportional to X-ray intensity
-        intensity_factor = 0.1
         base_energy_spread = 10.0 * intensity # eV
         energy_spread = base_energy_spread * (1 + intensity_factor * intensity)
         initial_energy = np.random.normal(10.0 * intensity, energy_spread, n_electrons)
