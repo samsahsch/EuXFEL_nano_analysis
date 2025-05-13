@@ -1,0 +1,8 @@
+tables
+h5netcdf 
+pandas
+xarray
+seaborn
+matplotlib
+numpy
+scipy
