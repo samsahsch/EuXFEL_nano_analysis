@@ -10,7 +10,9 @@ detector_distance = 300e-3    # 300 mm
 simulation_time = 500e-9      # 500 ns
 dt = 100e-12                  # 1 ps time step
 num_intensity_levels = 10
-base_electron_count = 500     # Base number of electrons (scales with intensity)
+base_electron_count = 50     # Base number of electrons (scales with intensity)
+intensity_factor = 0.5  # Factor to scale energy spread with intensity
+
 
 # Constants (in computational units)
 k_coulomb = 1.0  # Normalized Coulomb constant
