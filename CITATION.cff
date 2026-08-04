@@ -1,0 +1,126 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "Analysis code for X-ray Driven Trihydrogen Formation on Silica Nanosurfaces"
+abstract: >-
+  Analysis, figure-generation and simulation code for the single-particle
+  X-ray study of trihydrogen formation on hydrated silica nanoparticles,
+  European XFEL proposal 3408 (SQS instrument, NQS endstation).
+type: software
+license: BSD-3-Clause
+version: 1.0.0
+repository-code: "https://github.com/samsahsch/EuXFEL_nano_analysis"
+
+authors:
+  - family-names: Sahel-Schackis
+    given-names: Samuel
+    affiliation: "Stanford PULSE Institute, SLAC National Accelerator Laboratory"
+  - family-names: Summers
+    given-names: Adam
+    affiliation: "Linac Coherent Light Source, SLAC National Accelerator Laboratory"
+  - family-names: Dagar
+    given-names: Ritika
+    affiliation: "Indian Institute of Information Technology Bhopal"
+  - family-names: Feinberg
+    given-names: Alexandra
+    affiliation: "SLAC National Accelerator Laboratory"
+  - family-names: Grassl
+    given-names: Martin
+    affiliation: "SLAC National Accelerator Laboratory"
+  - family-names: Dold
+    given-names: Simon
+    affiliation: "European XFEL GmbH"
+  - family-names: Boll
+    given-names: Rebecca
+    affiliation: "European XFEL GmbH"
+  - family-names: Ovcharenko
+    given-names: Yevheniy
+    affiliation: "European XFEL GmbH"
+  - family-names: Aikens
+    given-names: Chris
+    affiliation: "Kansas State University"
+  - family-names: Costa Vera
+    given-names: Cesar
+    affiliation: "Escuela Politécnica Nacional"
+  - family-names: De Fanis
+    given-names: Alberto
+    affiliation: "European XFEL GmbH"
+  - family-names: Duley
+    given-names: Avijit
+    affiliation: "Kansas State University"
+  - family-names: Gerke
+    given-names: Felix
+    affiliation: "Freie Universität Berlin"
+  - family-names: Jost
+    given-names: Daniel
+    affiliation: "SLAC National Accelerator Laboratory"
+  - family-names: Leiner
+    given-names: Regina
+    affiliation: "Saarland University"
+  - family-names: Meyer
+    given-names: Michael
+    affiliation: "European XFEL GmbH"
+  - family-names: Molesky
+    given-names: Ilana J. P.
+    affiliation: "University of Nevada, Reno"
+  - family-names: Obaid
+    given-names: Razib
+    affiliation: "Stanford PULSE Institute, SLAC National Accelerator Laboratory"
+  - family-names: Powell
+    given-names: Jeffrey
+    affiliation: "Institut national de la recherche scientifique"
+  - family-names: Rennhack
+    given-names: Nils
+    affiliation: "European XFEL GmbH"
+  - family-names: Senfftleben
+    given-names: Björn
+    affiliation: "ETH Zurich"
+  - family-names: Tackenberg
+    given-names: Hendrik
+    affiliation: "University of Rostock"
+  - family-names: Tuemmler
+    given-names: Paul
+    affiliation: "University of Rostock"
+  - family-names: Usenko
+    given-names: Sergey
+    affiliation: "European XFEL GmbH"
+  - family-names: Peltz
+    given-names: Christian
+    affiliation: "University of Rostock"
+  - family-names: Fennel
+    given-names: Thomas
+    affiliation: "University of Rostock"
+  - family-names: Gallei
+    given-names: Markus
+    affiliation: "Saarland University"
+  - family-names: Rühl
+    given-names: Eckart
+    affiliation: "Freie Universität Berlin"
+  - family-names: Rudenko
+    given-names: Artem
+    affiliation: "Kansas State University"
+  - family-names: Rolles
+    given-names: Daniel
+    affiliation: "Kansas State University"
+  - family-names: Linker
+    given-names: Thomas
+    affiliation: "SLAC National Accelerator Laboratory"
+  - family-names: Kling
+    given-names: Matthias F.
+    affiliation: "Stanford University and SLAC National Accelerator Laboratory"
+
+preferred-citation:
+  type: article
+  title: "X-ray Driven Trihydrogen Formation on Silica Nanosurfaces"
+  year: 2026
+  authors:
+    - family-names: Sahel-Schackis
+      given-names: Samuel
+    - family-names: Kling
+      given-names: Matthias F.
+
+references:
+  - type: data
+    title: "Raw data for European XFEL proposal 3408"
+    doi: "10.22003/XFEL.EU-DATA-003408-00"
+    authors:
+      - name: "European XFEL"

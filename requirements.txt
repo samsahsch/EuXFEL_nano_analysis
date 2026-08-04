@@ -1,8 +1,53 @@
-tables
-h5netcdf 
-pandas
-xarray
-seaborn
-matplotlib
-numpy
-scipy
+# Analysis environment for "X-ray Driven Trihydrogen Formation on Silica
+# Nanosurfaces". Python 3.11 or later.
+#
+#   python -m venv .venv && source .venv/bin/activate
+#   pip install -r requirements.txt
+#
+# Versions are those used to produce the published figures. The published
+# analysis ran on the European XFEL "xfel (current)" environment, Python
+# 3.11.13; the pins below reproduce it on a standalone machine.
+
+# --- core analysis ---------------------------------------------------------
+numpy==2.2.5
+scipy==1.15.3
+pandas==2.2.3
+xarray==2025.4.0
+matplotlib==3.10.3
+seaborn==0.13.2
+PyYAML==6.0.3
+Pillow==11.2.1
+
+# --- HDF5 / netCDF storage -------------------------------------------------
+h5py==3.13.0
+tables==3.10.2          # pandas HDF5 backend, for the per-event/per-pulse tables
+h5netcdf==1.6.1         # xarray backend, for the eTOF and pnCCD arrays
+
+# --- notebooks -------------------------------------------------------------
+ipykernel==6.29.5
+jupyterlab>=4.0
+tqdm>=4.66
+
+# --- monomer/dimer classifier ----------------------------------------------
+# Needed only to retrain or re-run the CNN. The analysis notebooks for
+# Figures 1-3 and the figure scripts do not import these.
+scikit-learn==1.6.1
+tensorflow==2.19.0
+opencv-python==4.11.0.86
+scikit-image==0.25.2
+
+# --- first-principles simulations (figures/dft/) ---------------------------
+# Needed only for Fig. 4: the GPAW density-functional calculations and the
+# Fig. 4 build script, which reads the relaxed structures with ASE.
+# GPAW additionally needs libxc and an MPI stack; see
+# https://gpaw.readthedocs.io/install.html
+ase>=3.23
+gpaw>=24.6
+# The nonadiabatic quantum molecular dynamics in dft-md.py runs under QXMD,
+# which is distributed separately: https://github.com/USCCACS/QXMD
+
+# --- raw data access (scripts/preprocess.py only) --------------------------
+# extra_data is the European XFEL data-access library. Install from
+# https://github.com/European-XFEL/EXtra-data ; it is required only to
+# regenerate the preprocessed HDF5 files from the raw run directories.
+# extra-data>=1.17

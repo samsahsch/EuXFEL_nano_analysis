@@ -1,0 +1,74 @@
+# European XFEL run IDs, proposal 3408 (SQS instrument, NQS endstation).
+#
+# Grouped by sample and by gas-attenuator (GAT) transmission setting. The data
+# reported in the manuscript use the nominal 1% transmission setting, recorded
+# here as `transmission: 1.0` (relative to that setting, not absolute
+# beamline transmission). The 0.5, 0.25 and 2.0 groups are the relative
+# attenuator scans used for the transmission comparison.
+#
+# Nominal sizes are labels only. Every electric field is computed from the
+# TEM-measured diameter, given below and in euxfel_nano.constants.
+
+samples:
+
+  sio2_500nm:
+    label: "500 nm SiO2"
+    nominal_diameter_nm: 500
+    measured_diameter_nm: 504
+    measured_diameter_error_nm: 32
+    concentration_g_per_L: 10
+    source: "purchased (nanoComposix)"
+    runs:
+      transmission_1.0:  [232, 233, 313, 315, 316, 317, 318, 319, 320, 321,
+                          322, 325, 326, 327, 328, 329, 331, 332, 333]
+      transmission_0.5:  [336, 337, 338, 339, 340, 341, 342, 343, 345]
+      transmission_0.25: [347, 348, 349]
+      # Fig. 1c only. Recorded at 7594 V extraction, which is voltage setting 1
+      # of the SI; every other figure in the paper uses the 5400 V runs above,
+      # voltage setting 2. Selected with a 1000-1500 ion-count window.
+      setting1_7594V:    [376, 380, 382, 383, 384, 386, 387, 388, 389, 390,
+                          391, 393, 398, 399, 400, 402, 403, 404]
+
+  sio2_300nm:
+    label: "300 nm SiO2"
+    nominal_diameter_nm: 300
+    measured_diameter_nm: 312
+    measured_diameter_error_nm: 14
+    concentration_g_per_L: 10
+    source: "purchased (nanoComposix)"
+    runs:
+      transmission_1.0: [195, 196, 197, 198, 199, 200, 201, 202, 203, 205,
+                         206, 207, 208, 213, 214, 215, 216, 217, 218, 219]
+      transmission_0.5: [220, 221, 222, 223, 224, 225, 226]
+
+  sio2_100nm:
+    label: "100 nm SiO2"
+    nominal_diameter_nm: 100
+    measured_diameter_nm: 126
+    measured_diameter_error_nm: 7
+    concentration_g_per_L: 10
+    source: "grown from TEOS following Graf & van Blaaderen (2002)"
+    runs:
+      transmission_1.0: [293, 294, 296, 297, 298, 299, 300, 301, 302, 303,
+                         304, 306, 307, 308, 309]
+
+  coreshell_au_sio2:
+    label: "150 nm Au@SiO2 core-shell"
+    nominal_diameter_nm: 150
+    measured_diameter_nm: 147
+    measured_diameter_error_nm: 9
+    measured_core_diameter_nm: 100
+    measured_core_diameter_error_nm: 7
+    concentration_g_per_L: 1
+    source: "purchased (nanoComposix)"
+    runs:
+      transmission_1.0: [227, 229, 273, 274, 275, 276, 277, 278, 279, 280]
+      transmission_0.5: [228, 282, 283, 284, 285]
+      transmission_2.0: [286, 287]
+
+# Short keys used throughout the analysis code and in config/params.yaml.
+keys:
+  "500": sio2_500nm
+  "300": sio2_300nm
+  "100": sio2_100nm
+  "cs":  coreshell_au_sio2

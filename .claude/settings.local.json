@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git count-objects *)",
+      "Bash(.venv/bin/python -)",
+      "Bash(.venv/bin/python -c \"import yaml; d=yaml.safe_load\\(open\\('CITATION.cff'\\)\\); print\\('OK,', len\\(d['authors']\\), 'authors; license', d['license'], '; refs:', [r['type'] for r in d.get\\('references',[]\\)]\\)\")",
+      "Bash(.venv/bin/python -c ' *)"
+    ]
+  }
+}

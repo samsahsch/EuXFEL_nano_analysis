@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "euxfel-nano"
+version = "1.0.0"
+description = "Analysis code for X-ray driven trihydrogen formation on silica nanosurfaces (European XFEL proposal 3408)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "Samuel Sahel-Schackis" }]
+dependencies = [
+    "numpy>=2.0", "scipy>=1.15", "pandas>=2.2", "xarray>=2025.4",
+    "matplotlib>=3.10", "seaborn>=0.13", "PyYAML>=6.0",
+    "h5py>=3.13", "tables>=3.10", "h5netcdf>=1.6",
+]
+
+[project.optional-dependencies]
+classifier = ["scikit-learn>=1.6", "tensorflow>=2.19", "opencv-python>=4.11", "scikit-image>=0.25"]
+dft = ["ase>=3.23", "gpaw>=24.6"]
+
+[project.urls]
+Repository = "https://github.com/samsahsch/EuXFEL_nano_analysis"
+Data = "https://doi.org/10.22003/XFEL.EU-DATA-003408-00"
+
+[tool.setuptools.packages.find]
+where = ["src"]

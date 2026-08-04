@@ -1,0 +1,31 @@
+# Environments
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipython/
+
+# Jupyter
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+
+# Raw and preprocessed experimental data.
+# Raw data: https://doi.org/10.22003/XFEL.EU-DATA-003408-00
+# See README.md for the expected layout under data/.
+# Anchored to the repository root, so figures/data and figures/dft/data --
+# the small derived arrays the figure scripts need -- stay tracked.
+/data/
+*.h5
+*.hdf5
+*.nc
+
+# Trained model weights (see README.md)
+*.keras
+*.weights.h5
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/

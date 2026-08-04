@@ -1,0 +1,188 @@
+# Analysis parameters for "X-ray Driven Trihydrogen Formation on Silica
+# Nanosurfaces". Every number a figure depends on is collected here rather than
+# repeated in notebook cells. Section references are to the manuscript and its
+# Supplementary Information (SI).
+
+# ---------------------------------------------------------------------------
+# Time-of-flight to mass-over-charge calibration (SI "TOF Mass Spectrometry
+# Calibration"). SI Eq. 1: tof = t0 + k*sqrt(m/q), exponent held at 2.
+#
+# NOTE: the deposited notebook also contains an earlier unconstrained fit,
+# m/q = a * tof**b, in which the nonzero t0 is absorbed into a free exponent.
+# The two forms agree to well under a nanosecond *within a given voltage
+# setting* (RMS 1.3 ns for setting 1, 0.25 ns for setting 2 across the argon
+# series), so the choice of form is immaterial. The choice of *setting* is not:
+# the two settings differ by ~19% in flight time at fixed m/q.
+#
+# Each legacy power law below is recorded against the setting it actually
+# reproduces, determined by refitting the argon series. See the "TOF
+# calibration" note in README.md.
+# ---------------------------------------------------------------------------
+tof_calibration:
+  argon_lines_mq: [40, 20, 13.333333333333334, 10, 8]   # Ar+ .. Ar5+
+  voltage_setting_1:          # Fig. 1c only
+    # 7594 V extraction, runs sio2_500nm.runs.setting1_7594V.
+    t0_s: 7.45113e-9
+    k_s:  2.06479e-7
+    # Unconstrained equivalent, SI exponent 2.018. This is the form applied to
+    # produce the published Fig. 1c m/q axis.
+    legacy_power_law: {a: 29497236325759.32, b: 2.0175071848701878}
+  voltage_setting_2:          # all remaining figures
+    # 5400 V extraction, the transmission_* run groups.
+    t0_s: 6.82e-9
+    k_s:  2.450e-7
+    # Unconstrained equivalent, SI exponent 2.013.
+    legacy_power_law: {a: 19788855827929.47, b: 2.013491982616985}
+
+# Fig. 1c is the only panel on voltage setting 1, and its x axis is m/q
+fig1c:
+  mq_range: [0, 90]
+  mq_hist_bins: 1000        # np.linspace(0, 90, 1000)
+  mq_heatmap_bins: 201      # np.linspace(0, 90, 201) -> 200 columns
+  ion_count_window: [1000, 1500]
+  background_ion_count_window: [20, 40]   # argon-only pulses, calibration anchors
+  background_downsampling: 200000
+  heatmap_lognorm: {vmin: 3.0e-6, vmax: 2.0e-4}
+
+# ---------------------------------------------------------------------------
+# VMI radial position to ion kinetic energy (SI "SIMION Simulations").
+# Fitted on monoenergetic protons, 1-100 eV, R^2 = 0.99999.
+#   p = 5.69 * E**0.5024      (p in mm, E in eV)
+#   E = 0.03188 * p**1.986
+# ---------------------------------------------------------------------------
+vmi_energy_calibration:
+  position_from_energy: {a: 5.69, b: 0.5024}
+  energy_from_position: {a: 0.03188, b: 1.986}
+
+# ---------------------------------------------------------------------------
+# Spatial selection on the ion VMI detector.
+# ---------------------------------------------------------------------------
+spatial:
+  # Line separating the primary emission mechanism from the argon channel
+  # (SI "Separation of Reaction Mechanisms", Fig. S5). Only events to the
+  # right of this line are used. Given as two points (x, y).
+  divider_line: [[142, 0], [112, 256]]
+  # Detector centre used for radial distances.
+  detector_centre: [133.5, 118.0]
+  # Tilted region used for the transverse-momentum (fish) plot of Fig. 1c,
+  # as (x, y, width, height, angle_degrees).
+  fish_zone: [145, 0, 10, 256, 7]
+  fish_y_limits: [32, 224]
+
+# ---------------------------------------------------------------------------
+# Electron time-of-flight integration (SI "Surface Electric Field", Fig. S9b).
+# The photoelectron feature rises at ~115 ns and peaks near 140 ns; structure
+# beyond ~400 ns is MCP backscatter and is excluded.
+# ---------------------------------------------------------------------------
+electron_window_s: [1.0e-7, 2.0e-7]
+
+# ---------------------------------------------------------------------------
+# Hydrogen ion species flight-time windows, in nanoseconds (Fig. 2b, Fig. 3).
+# ---------------------------------------------------------------------------
+species_windows_ns:
+  H+:   [180.0, 225.0]
+  H2+:  [265.0, 325.0]
+  H3+:  [347.0, 393.0]
+
+# Full analysis window; denominator of the pooled fraction.
+analysis_tof_range_s: [1.0e-7, 5.0e-7]
+
+# ---------------------------------------------------------------------------
+# Surface electric field bins, V/nm (Fig. 3a, Fig. 3b).
+# ---------------------------------------------------------------------------
+field_bins:
+  - [0.2, 0.5]
+  - [0.5, 1.0]
+  - [1.0, 1.5]
+  - [1.5, 2.0]
+  - [2.0, 3.0]
+  - [3.0, 6.0]
+  - [10.0, 30.0]
+
+# Bins-per-window used when histogramming each field bin, matching the
+# decreasing statistics at high field.
+bins_per_field_window: [500, 250, 250, 250, 150, 150, 80]
+
+# ---------------------------------------------------------------------------
+# Per-shot ion count windows (SI "Energy Density", "Yield Uncertainties").
+# The detected ion count is not a linear proxy for deposited energy density;
+# the warm dense matter transition appears at ~3000 counts for 500 nm, ~2000
+# for 300 nm and Au@SiO2, and ~1500 for 100 nm.
+# ---------------------------------------------------------------------------
+ion_count_windows:
+  main: [500, 2000]           # Fig. 3a, 3b
+  # Fig. S10 panels (a)-(f): below, across and above the WDM transition.
+  supplementary_scan:
+    a: [500, 1000]
+    b: [500, 1500]
+    c: [500, 2500]
+    d: [500, 3000]
+    e: [3000, 4000]
+    f: [3000, 5000]
+
+# Monomer/dimer comparison uses a separate, higher-intensity selection
+# because a dimer produces roughly twice the ion signal.
+monomer_dimer:
+  matched_field_ranges_v_per_nm:
+    main: [2.0, 4.0]          # Fig. 3d
+    supplementary:            # Fig. S14
+      a: [1.0, 3.0]
+      b: [3.0, 5.0]
+  reference_ion_counts:
+    monomer: 4000
+    dimer:   8000
+
+# ---------------------------------------------------------------------------
+# Uncertainties (SI "Yield Uncertainties and Significance").
+# The independent statistical unit is the X-ray shot, not the ion.
+# ---------------------------------------------------------------------------
+bootstrap:
+  n_resamples: 4000
+  seed: 0
+
+# ---------------------------------------------------------------------------
+# Monomer/dimer CNN classifier (SI "Morphology Classification by CNN").
+# ---------------------------------------------------------------------------
+classifier:
+  input_shape: [200, 200, 2]        # preprocessed image + beam-stop mask
+  conv1: {kernel: 7, filters: 16}
+  pool: 4
+  residual: {skip_kernel: 1, kernel: 5, filters: 32}
+  dense_units: 64
+  optimizer: adam
+  learning_rate: 1.0e-4
+  loss: binary_focal
+  focal_alpha: 0.8
+  focal_gamma: 2.0
+  batch_size: 32
+  max_epochs: 40
+  test_fraction: 0.2
+  stratified: true
+  class_weighting: true
+  reduce_lr_on_plateau: {factor: 0.5, patience: 5}
+  early_stopping: {patience: 10, restore_best_weights: true}
+  progressive_stages: 5             # decreasing LR, decreasing hit intensity
+  augmentation:
+    left_right_flip: true
+    intensity_scaled_copies: 4
+    intensity_scale_range: [0.4, 2.5]
+  decision_thresholds: {monomer: 0.35, dimer: 0.65}
+  seed: 42
+  # Published confusion matrix (Fig. S13), dimer as positive class:
+  # TN=1062, FP=1, FN=5, TP=457, N=1525 -> precision 0.998, recall 0.989,
+  # F1 0.993.
+  reported_confusion: {tn: 1062, fp: 1, fn: 5, tp: 457}
+
+# ---------------------------------------------------------------------------
+# Coherent diffractive imaging (SI "Scattering Images Analysis").
+# ---------------------------------------------------------------------------
+cdi:
+  photon_energy_ev: 1880
+  wavelength_m: 0.66e-9
+  detector_distance_m: 0.346
+  pixel_size_m: 75.0e-6
+  detector_shape: [1024, 1024]
+  fig3c_crop_pixels: [200, 100]     # centred on the forward direction
+  # Orientation averaging: only the in-plane projection of the dimer axis
+  # enters the azimuthal interference term, <sin(alpha)> = pi/4.
+  orientation_projection_factor: 1.2732395447351628   # 4/pi
