@@ -124,3 +124,9 @@ references:
     doi: "10.22003/XFEL.EU-DATA-003408-00"
     authors:
       - name: "European XFEL"
+  - type: data
+    title: "DFT data for \"X-ray Driven Trihydrogen Formation on Silica Nanosurfaces\""
+    doi: "10.5281/zenodo.23747182"
+    authors:
+      - family-names: Sahel-Schackis
+        given-names: Samuel

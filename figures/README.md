@@ -2,15 +2,15 @@
 
 Each manuscript figure is produced by one script here. The scripts read only
 the arrays in `data/` (and the schematics in `assets/`), so **Figures 1-3 can be
-rebuilt without the raw experimental data**, which is under embargo until
-publication.
+rebuilt without the raw experimental data**. Fig. 4 is built from the DFT
+outputs on Zenodo (https://doi.org/10.5281/zenodo.23747182).
 
 ```
 cd figures
 python build_fig1.py     # -> fig1.pdf, fig1.png
 python build_fig2.py     # -> fig2.pdf, fig2.png
 python build_fig3.py     # -> fig3.pdf, fig3.png
-cd dft && python build_fig4.py
+# Fig. 4: run build_fig4.py inside the unpacked Zenodo record
 ```
 
 All of Figures 1-3 share `figstyle.py`, which fixes the printed geometry: the
@@ -37,7 +37,7 @@ normalizes itself.
 | 3b | `build_fig3.py` | `fig3b_field_centers.npy`, `fig3b_raw_yield_<species>.npy`, `fig3b_err_raw_<species>.npy`, `fig3b_err_low_<species>.npy` |
 | 3c | `build_fig3.py` | `fig3c_monomer.npy`, `fig3c_dimer.npy` |
 | 3d | `build_fig3.py` | `fig3d_x.npy`, `fig3d_y_mono.npy`, `fig3d_y_dimer.npy` |
-| 4a, 4b | `dft/build_fig4.py` | `dft/data/Sio2_Ez_+*.txt`, `dft/data/*.xyz` |
+| 4a, 4b | `dft/build_fig4.py` | `pdos-*/`, `struct.png`, `combo.0001.xyz` (Zenodo record) |
 
 Helper scripts, run before the build scripts when the inputs are regenerated
 from raw data: `extract_contours.py`, `extract_fig2_contours.py`,
@@ -68,7 +68,9 @@ README.
 
 ## `dft/`
 
-`field.py` and `dft-md.py` drive the GPAW and QXMD calculations of the
-silica-water interface under an applied field. `data/Sio2_Ez_+*.txt` are the
-resulting atom-decomposed partial densities of states at 0, 0.25, 0.5, 0.75 and
-1.0 V/A, which `build_fig4.py` renders as Fig. 4b.
+`field.py` runs the GPAW calculations of the silica-water interface under an
+applied field of 0, 0.25, 0.5, 0.75 and 1.0 V/A; `data/Sio2_Ez_+*.txt` are their
+output logs and `data/combo.0001.xyz` the structure. The atom-projected densities
+of states that `build_fig4.py` renders as Fig. 4b are on Zenodo
+(https://doi.org/10.5281/zenodo.23747182). `dft-md.py` is a GPAW molecular-dynamics driver that no
+figure uses.

@@ -22,7 +22,11 @@ ROW_GAP, ROW_H, COL_GAP = 0.5, 1.30, 0.44   # row gap clears a's x-label vs c's 
 GAP_C = 0.08                      # between the two stacked CDI images (room for q_y=0 labels)
 CDI_CBAR_GAP, CDI_CBAR_W, CDI_CBAR_LAB = 0.03, 0.06, 0.34
 
-BANDS = [(180, 225, "#1f77b4"), (265, 325, "#d62728"), (347, 393, "#2ca02c")]
+# species colours: Okabe-Ito blue / vermillion / reddish purple (colour-blind safe;
+# no red-green pair).  Same three in the bands (a, d), the yields (b) and Fig. S10.
+C_H1, C_H2, C_H3 = "#0072B2", "#D55E00", "#CC79A7"
+BANDS = [(180, 225, C_H1), (265, 325, C_H2), (347, 393, C_H3)]
+BAND_ALPHA = 0.15   # at 0.10 the vermillion tint reads peach, not the H2+ orange of panel b
 BAND_LABELS = ["H$^+$", "H$_2^+$", "H$_3^+$"]
 # label y just above each curve peak (H+~5.9, H2+~2.95, H3+~1.48); ylim top gives
 # headroom so even the tall H+ label stays inside the axes.
@@ -82,7 +86,7 @@ ax_d = fig.add_axes(frac(dx0, y_bot, wide_w, ROW_H))
 
 def draw_bands(ax):
     for (lo, hi, c), lab, ly, lx in zip(BANDS, BAND_LABELS, BAND_LABEL_Y, BAND_LABEL_X):
-        ax.axvspan(lo, hi, color=c, alpha=0.10, lw=0)
+        ax.axvspan(lo, hi, color=c, alpha=BAND_ALPHA, lw=0)
         tx = (lo + hi) / 2 if lx is None else lx
         ax.text(tx, ly, lab, color="0.25",
                 fontsize=FS, ha="center", va="bottom")
@@ -123,9 +127,9 @@ f_sat = lambda E, A, E0, C: A * (1 - np.exp(-E / E0)) + C
 f_dec = lambda E, A, E0, C: A * np.exp(-E / E0) + C
 Egrid = np.linspace(field.min(), field.max(), 300)
 series = [
-    ("H$^+$",   "#1f77b4", "o", (0, (4, 2)),          f_sat),
-    ("H$_2^+$", "#d62728", "s", (0, (1, 1.5)),        f_dec),
-    ("H$_3^+$", "#2ca02c", "^", (0, (4, 1.5, 1, 1.5)), f_sat),
+    ("H$^+$",   C_H1, "o", (0, (4, 2)),          f_sat),
+    ("H$_2^+$", C_H2, "s", (0, (1, 1.5)),        f_dec),
+    ("H$_3^+$", C_H3, "^", (0, (4, 1.5, 1, 1.5)), f_sat),
 ]
 for name, c, mk, ls, fn in series:
     raw = load(f"fig3b_raw_yield_{name}.npy")

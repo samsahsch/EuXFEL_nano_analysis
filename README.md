@@ -7,7 +7,7 @@ Experiment: European XFEL proposal 3408, SQS instrument, NQS endstation, June 20
 
 - **Paper**: *X-ray Driven Trihydrogen Formation on Silica Nanosurfaces*
 - **Raw data**: <https://doi.org/10.22003/XFEL.EU-DATA-003408-00>
-  (under embargo until publication)
+- **DFT data** (Fig. 4, Supplementary Table S1): <https://doi.org/10.5281/zenodo.23747182>
 
 ## Quick start
 
@@ -20,7 +20,7 @@ cd figures && python build_fig3.py
 ```
 
 The figure scripts read only the arrays committed under `figures/data/`, so
-the main figures are reproducible today, while the raw data is embargoed.
+Figures 1-3 can be rebuilt without downloading the raw data.
 
 To rerun the analysis itself you need the preprocessed per-run files; point
 `EUXFEL_NANO_DATA` at the directory holding them:
@@ -67,7 +67,7 @@ dropped two or more consecutive trains at the start or end.
 | 1 | `notebooks/figure1.ipynb` | `figures/build_fig1.py` |
 | 2 | `notebooks/figure2.ipynb` | `figures/build_fig2.py` |
 | 3 | `notebooks/figure3.ipynb` | `figures/build_fig3.py` |
-| 4 | — (GPAW / QXMD) | `figures/dft/build_fig4.py` |
+| 4 | — (GPAW) | `build_fig4.py` in the [Zenodo record](https://doi.org/10.5281/zenodo.23747182) |
 | S10, S11 | `notebooks/supplementary.ipynb` | — |
 | S13 | `notebooks/classifier.ipynb` | — |
 
@@ -132,7 +132,7 @@ with the bootstrap, the normalized errors match analytic ratio propagation, and
 the result is converged in the number of resamples.
 
 The headline significances are reproducible offline from the committed arrays,
-with no embargoed data:
+without the raw data:
 
 ```python
 import numpy as np
@@ -157,10 +157,12 @@ comes from the deposited weights, which are the authoritative artifact.
 
 ## Simulations
 
-`figures/dft/` drives the first-principles work: `field.py` and `dft-md.py` run
-the GPAW density-functional and QXMD nonadiabatic quantum molecular dynamics
-calculations of the silica-water interface under an applied field, and
-`build_fig4.py` renders the resulting partial densities of states as Fig. 4b.
+`figures/dft/field.py` runs the GPAW density-functional calculations of the
+silica-water interface under an applied field, and `build_fig4.py` renders the
+resulting partial densities of states as Fig. 4b. The PDOS outputs, with the
+scripts for Fig. 4 and Supplementary Table S1, are archived on Zenodo:
+<https://doi.org/10.5281/zenodo.23747182>. `dft-md.py` is a GPAW molecular-dynamics driver that no
+figure uses.
 
 `models/` holds standalone analytic models used as cross-checks:
 electrostatics of charged and paired nanoparticles, and estimates of X-ray
